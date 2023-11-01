@@ -23,6 +23,20 @@ class Auto:
         self.travelled_distance += self.current_speed * hours
 
 
+class Electric(Auto):
+    def __init__(self, licence_number, top_speed, capacity):
+        super().__init__(licence_number, top_speed)
+        self.battery_capacity = capacity
+    pass
+
+
+class Combustion(Auto):
+    def __init__(self, licence_number, top_speed, volume):
+        super().__init__(licence_number, top_speed)
+        self.tank_volume = volume
+    pass
+
+
 class Race:  # 0_O
     total_hours = 0
 
@@ -58,13 +72,24 @@ class Race:  # 0_O
             return False
 
 
-race_cars = []
-for iterator in range(10):
-    race_cars.append(Auto(f"ABC-{iterator + 1}", random.randint(100, 200)))
-demolition_derby = Race("The Great Demolition Derby", 8000, race_cars)
-iterator = 1
-while not demolition_derby.race_over():
-    demolition_derby.hour_passes()
-    if iterator % 10 == 0:
-        demolition_derby.print_standings()
-    iterator += 1
+def init_demolition_derby():
+    race_cars = []
+    for iterator in range(10):
+        race_cars.append(Auto(f"ABC-{iterator + 1}", random.randint(100, 200)))
+    demolition_derby = Race("The Great Demolition Derby", 8000, race_cars)
+    iterator = 1
+    while not demolition_derby.race_over():
+        demolition_derby.hour_passes()
+        if iterator % 10 == 0:
+            demolition_derby.print_standings()
+        iterator += 1
+
+
+electric_car = Electric("ABC-15", 150, 52.5)
+combustion_car = Combustion("ACD-123",180, 32.3)
+cars = electric_car, combustion_car
+for car in cars:
+    car.current_speed = car.top_speed
+    car.travel(3)
+for i, car in enumerate(cars):
+    print(f"car{i+1} : {car.travelled_distance}")
