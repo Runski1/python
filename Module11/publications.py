@@ -21,15 +21,14 @@ class Book(Publication):
         self.author = author
         self.pagecount = pagecount
 
+
 class Magazine(Publication):
     def __init__(self, name, editor_in_chief):
         super().__init__(name)
         self.editor_in_chief = editor_in_chief
 
 
-book = Book("ASD", "Matias", 200)
+book = Book("Hytti n:o 6", "Rosa Liksom", 200)
 book.print_properties()
-magazine = Magazine("Aku Ankka", "Mikko Metelä")
+magazine = Magazine("Aku Ankka", "Aki Hyyppä")
 magazine.print_properties()
-print(vars(book))
-print(vars(magazine))
