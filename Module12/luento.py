@@ -1,7 +1,7 @@
 import requests
 
 query = input("Anna hakusana: ")
-request = "https://api.tvmaze.com/search/shows?q=" + query
+request = "https://api.tvmaze.com/searh/shows?q=" + query
 
 
 def print_show_data(show_data):
