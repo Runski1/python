@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, Response
+from flask import Flask, Response, render_template, abort, request
 import json
 
 
@@ -29,19 +29,20 @@ app.json.sort_keys = False
 
 @app.route('/')
 def return_links():
-    return ("<a href='http://127.0.0.1:3000/kentt%C3%A4/'>Search airports</a></br>"
-            "<a href='http://127.0.0.1:3000/alkuluku'>Primes</a>")
+    return ("<a href='http://127.0.0.1:5000/kentt%C3%A4/'>Search airports</a></br>"
+            "<a href='http://127.0.0.1:5000/alkuluku'>Primes</a>")
 
 
 @app.route('/kenttä/')
 def show_instructions_airport():
-    return ("Add ICAO-code after url, like this <a href='http://127.0.0.1:3000/kentt%C3%A4/EFHK'>"
-            "example</a>")
+    return dict(request.headers, "hellooo")
+    # return ("Add ICAO-code after url, like this <a href='http://127.0.0.1:5000/kentt%C3%A4/EFHK'>"
+    #         "example</a>")
 
 
 @app.route('/alkuluku/')
 def show_instructions_prime():
-    return ("Add a number after url, like this <a href='http://127.0.0.1:3000/alkuluku/31'>"
+    return ("Add a number after url, like this <a href='http://127.0.0.1:5000/alkuluku/31'>"
             "example</a>")
 
 
@@ -55,16 +56,27 @@ def is_prime(num):
     return check_if_prime(num)
 
 
-def errhandler(error):
+@app.errorhandler(404)
+def page_not_found(vikakooodi):
+    return render_template('404.html'), 404
+
+
+def errhandler(error):  # Tämä on täysin turha, kirjoitin ennen kuin tiesin app.errorhandler-dekoraattorista
     if error == "value_error":
         msg = {'msg': "Not a valid number"}
-        errcode = 400
-        return msg, errcode
-    elif error == "type_error":
-        msg = {'msg': "ICAO not found"}
-        errcode = 400
+        errcode = 404
         return msg, errcode
 
+
+# @app.errorhandler(405)    Tämä tänne talteen, osittainen vastaus omaan kysymykseeni
+# def method_not_allowed(e):
+#     # if a request has the wrong method to our API
+#     if request.path.startswith('/api/'):
+#         # we return a json saying so
+#         return jsonify(message="Method Not Allowed"), 405
+#     else:
+#         # otherwise we return a generic site-wide 405 page
+#         return render_template("405.html"), 405
 
 def make_response(data, boolean):
     data['isPrime'] = boolean
@@ -101,9 +113,8 @@ def search_icao(icao):
         db_data_json = {'ICAO': icao.upper(), 'Name': db_data[0], 'Municipality': db_data[1]}
         return db_data_json
     except TypeError:
-        message, error_code = errhandler("type_error")
-        return Response(response=json.dumps(message), status=error_code, mimetype='application/json')
+        abort(405)
 
 
 if __name__ == '__main__':
-    app.run(use_reloader=True, host='127.0.0.1', port=3000)
+    app.run(use_reloader=True, host='127.0.0.1', port=5000)
