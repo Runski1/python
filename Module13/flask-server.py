@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, Response, render_template, abort, request
+from flask import Flask, Response, render_template, abort
 import json
 
 
@@ -35,9 +35,8 @@ def return_links():
 
 @app.route('/kenttä/')
 def show_instructions_airport():
-    return dict(request.headers, "hellooo")
-    # return ("Add ICAO-code after url, like this <a href='http://127.0.0.1:5000/kentt%C3%A4/EFHK'>"
-    #         "example</a>")
+    return ("Add ICAO-code after url, like this <a href='http://127.0.0.1:5000/kentt%C3%A4/EFHK'>"
+            "example</a>")
 
 
 @app.route('/alkuluku/')
@@ -113,8 +112,9 @@ def search_icao(icao):
         db_data_json = {'ICAO': icao.upper(), 'Name': db_data[0], 'Municipality': db_data[1]}
         return db_data_json
     except TypeError:
-        abort(405)
+        abort(404)
 
 
+print(__name__)
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=5000)
