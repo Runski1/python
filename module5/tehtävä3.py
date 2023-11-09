@@ -15,11 +15,10 @@ if num == 1 or num <= 0:
         quit()
 
 for x in range(2, num):
-    if x != num:
-        if num % x == 0:
-            print(f"Luku {num} ei ole alkuluku.\n"
-                  f"ensimmäinen löytynyt tekijä: {x}")
-            quit()
+    if num % x == 0:
+        print(f"Luku {num} ei ole alkuluku.\n"
+              f"ensimmäinen löytynyt tekijä: {x}")
+        quit()
 
 print(f"Luku {num} on alkuluku.")
 
